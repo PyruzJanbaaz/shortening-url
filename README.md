@@ -1,4 +1,4 @@
-# shorteningURL
+# URL Shortening Service
 A simple URL shortening Service by Spring Boot
 
 You need the following tools and technologies to develop the same.
