@@ -1,5 +1,6 @@
 package com.pyruz.shortening.handler;
 
+import com.pyruz.shortening.model.entiry.Url;
 import lombok.SneakyThrows;
 
 import java.net.URL;
@@ -34,5 +35,9 @@ public class UrlHandler {
 
     public static String getShortPortion(String shortURL) {
         return shortURL.substring(shortURL.lastIndexOf('/') + 1);
+    }
+
+    public static String getFullShorURL(Url url) {
+        return UrlHandler.getBaseDomain(url.getOriginalURL()) + "/" + url.getShortURL();
     }
 }

@@ -32,7 +32,7 @@ public class UrlController {
      * @param  urlBean  the url
      * @return Url in baseDto data field
      */
-    @PostMapping("/url")
+    @PostMapping("/v1/url")
     public ResponseEntity<?> generateShortURL(@Valid @RequestBody UrlBean urlBean) {
         return new ResponseEntity<>(urlService.generateShortURL(urlBean), HttpStatus.CREATED);
     }
@@ -45,7 +45,7 @@ public class UrlController {
      * @param  customUrlBean  the url and custom portion
      * @return Url in baseDto data field
      */
-    @PostMapping("/url/custom")
+    @PostMapping("/v1/url/custom")
     public ResponseEntity<?> generateCustomShortURL(@Valid @RequestBody CustomUrlBean customUrlBean) {
         return new ResponseEntity<>(urlService.generateCustomShortURL(customUrlBean), HttpStatus.OK);
     }
@@ -57,7 +57,7 @@ public class UrlController {
      *
      * @param  shortURL  the shortURL to convert to the originalURL
      */
-    @GetMapping("/url")
+    @GetMapping("/v1/url")
     public void redirectToOriginalUrl(@URL @RequestParam String shortURL, HttpServletResponse response) throws IOException {
         response.sendRedirect(urlService.getCurrentURL(shortURL).getOriginalURL());
     }
@@ -70,7 +70,7 @@ public class UrlController {
      * @param  shortURL  the shortURL to get the yesterday reviews
      * @return List<Review> in baseDto data field
      */
-    @GetMapping("/url/review")
+    @GetMapping("/v1/url/review")
     public ResponseEntity<?> getUrlReviewCount(@URL @RequestParam String shortURL) {
         return new ResponseEntity<>(urlService.getURLReview(shortURL), HttpStatus.OK);
     }
@@ -83,7 +83,7 @@ public class UrlController {
      * @param  shortURL  the shortURL to remove from database
      * @return baseDto
      */
-    @DeleteMapping("/url")
+    @DeleteMapping("/v1/url")
     public ResponseEntity<?> redirectToOriginalUrl(@URL @RequestParam String shortURL) {
         return new ResponseEntity<>(urlService.deleteURL(shortURL), HttpStatus.OK);
     }
