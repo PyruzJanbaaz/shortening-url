@@ -1,11 +1,13 @@
 package com.pyruz.shortening.model.entiry;
 
 import com.fasterxml.jackson.annotation.JsonManagedReference;
+import lombok.Getter;
 
 import javax.persistence.*;
 import java.util.Date;
 import java.util.List;
 
+@Getter
 @Entity
 @Table(name = "url")
 public class Url {
@@ -14,6 +16,7 @@ public class Url {
     @GeneratedValue
     private long id;
 
+    @Column(name = "original_url", nullable = false)
     private String originalURL;
 
     private String shortURL;
@@ -36,40 +39,20 @@ public class Url {
         this.reviews = reviews;
     }
 
-    public long getId() {
-        return id;
-    }
-
     public void setId(long id) {
         this.id = id;
-    }
-
-    public String getOriginalURL() {
-        return originalURL;
     }
 
     public void setOriginalURL(String originalURL) {
         this.originalURL = originalURL;
     }
 
-    public String getShortURL() {
-        return shortURL;
-    }
-
     public void setShortURL(String shortURL) {
         this.shortURL = shortURL;
     }
 
-    public Date getCreationDate() {
-        return creationDate;
-    }
-
     public void setCreationDate(Date creationDate) {
         this.creationDate = creationDate;
-    }
-
-    public List<Review> getReviews() {
-        return reviews;
     }
 
     public void setReviews(List<Review> reviews) {

@@ -12,7 +12,7 @@ public class TypesHelper {
 
     private static String BENZ = "BENZ";
     private static String UNKNOWN = "UNKNOWN";
-    public static final String[] HEADERS_TO_TRY = {
+    protected static final String[] HEADERS_TO_TRY = {
             "X-Forwarded-",
             "X-Forwarded-For",
             "X-Forwarded-Host",
@@ -52,7 +52,7 @@ public class TypesHelper {
         if (request != null) {
             for (String header : HEADERS_TO_TRY) {
                 String ip = request.getHeader(header);
-                if (ip != null && ip.length() != 0 && !UNKNOWN.toLowerCase().equalsIgnoreCase(ip)) {
+                if (ip != null && !ip.isEmpty() && !UNKNOWN.toLowerCase().equalsIgnoreCase(ip)) {
                     return ip;
                 }
             }
