@@ -39,7 +39,7 @@ public class SwaggerConfiguration {
         .licenseUrl("https://www.linkedin.com/in/pyruz-janbaaz-9a327226/")
         .contact(
             new Contact(
-                "Pyruz Janbaaz",
+                "Pyruz Janbaz",
                 "https://www.linkedin.com/in/pyruz-janbaaz-9a327226/",
                 "Pyruz.Janbaaz@gmail.com"))
         .build();

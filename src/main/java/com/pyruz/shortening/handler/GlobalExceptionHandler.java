@@ -3,7 +3,6 @@ package com.pyruz.shortening.handler;
 import com.pyruz.shortening.model.dto.base.BaseDTO;
 import com.pyruz.shortening.model.dto.base.MetaDTO;
 import com.pyruz.shortening.model.dto.base.ServiceExceptionDTO;
-import org.hibernate.validator.internal.engine.ConstraintViolationImpl;
 import org.hibernate.validator.internal.engine.path.PathImpl;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -15,13 +14,12 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.servlet.NoHandlerFoundException;
 
-import javax.servlet.http.HttpServletRequest;
 import javax.validation.ConstraintViolation;
 import javax.validation.ConstraintViolationException;
+import java.util.Objects;
 
 @ControllerAdvice
 public class GlobalExceptionHandler {
-
     final ApplicationProperties applicationProperties;
     final ApplicationMessages applicationMessages;
 
@@ -32,43 +30,43 @@ public class GlobalExceptionHandler {
 
     // --> ServiceLevelValidation
     @ExceptionHandler(MethodArgumentNotValidException.class)
-    public ResponseEntity<BaseDTO> handleMethodArgumentNotValid(MethodArgumentNotValidException ex, HttpServletRequest request) {
+    public ResponseEntity<BaseDTO> handleMethodArgumentNotValid(MethodArgumentNotValidException ex) {
         BaseDTO baseDTO = new BaseDTO();
         for (FieldError error : ex.getBindingResult().getFieldErrors()) {
             String errorMessage = applicationProperties.getProperty("application.message..general.validation.error.text");
             Integer errorCode = HttpStatus.BAD_REQUEST.value();
             String fieldName = error.getField();
-            String validationErrorType = (error.getCodes() != null && error.getCodes().length == 4) ? error.getCodes()[3] : null;
+            String validationErrorType = (Objects.requireNonNull(error.getCodes()).length == 4) ? (Objects.requireNonNull(error.getCodes()))[3] : null;
             String sizeError = "";
-            if (validationErrorType != null)
+            if (validationErrorType != null) {
                 switch (validationErrorType) {
                     case "NotBlank":
                         errorMessage = applicationProperties.getProperty("application.message.missing.parameter.text");
                         break;
                     case "Min":
                         errorMessage = applicationProperties.getProperty("application.message.invalid.min.length.text");
-                        sizeError = (error.getArguments() != null && error.getArguments().length == 2) ? error.getArguments()[1].toString() : "";
+                        sizeError = ((Objects.requireNonNull(error.getArguments())).length == 2) ? (Objects.requireNonNull(error.getArguments()))[1].toString() : "";
                         break;
                     case "Max":
                         errorMessage = applicationProperties.getProperty("application.message.invalid.max.length.text");
-                        sizeError = (error.getArguments() != null && error.getArguments().length == 2) ? error.getArguments()[1].toString() : "";
+                        sizeError = ((Objects.requireNonNull(error.getArguments())).length == 2) ? (Objects.requireNonNull(error.getArguments()))[1].toString() : "";
                         break;
                     case "URL":
                         errorMessage = applicationProperties.getProperty("application.message.validation.error.text");
-                        sizeError = (error.getArguments() != null && error.getArguments().length == 6) ? error.getArguments()[1].toString() : "";
+                        sizeError = ((Objects.requireNonNull(error.getArguments())).length == 6) ? (Objects.requireNonNull(error.getArguments()))[1].toString() : "";
                         break;
                     case "Size":
                         errorMessage = applicationProperties.getProperty("application.message.invalid.length.text");
-                        if (error.getArguments() != null && error.getArguments().length == 3) {
-                            Integer maxValue = TypesHelper.tryParseInt(error.getArguments()[1]);
-                            Integer minValue = TypesHelper.tryParseInt(error.getArguments()[2]);
+                        if ((Objects.requireNonNull(error.getArguments())).length == 3) {
+                            Integer maxValue = TypesHelper.tryParseInt((Objects.requireNonNull(error.getArguments()))[1]);
+                            Integer minValue = TypesHelper.tryParseInt((Objects.requireNonNull(error.getArguments()))[2]);
                             if (minValue != 0) {
-                                sizeError = applicationProperties.getProperty("application.message.less") + " " + minValue.toString() + " ";
+                                sizeError = applicationProperties.getProperty("application.message.less") + " " + minValue + " ";
                             }
                             if (maxValue != Integer.MAX_VALUE) {
-                                if (!sizeError.equals(""))
+                                if (!sizeError.isEmpty())
                                     sizeError = String.format("%s %s ", sizeError, applicationProperties.getProperty("application.message.and"));
-                                sizeError += applicationProperties.getProperty("application.message.more") + " " + maxValue.toString() + " ";
+                                sizeError += applicationProperties.getProperty("application.message.more") + " " + maxValue + " ";
                             }
                         }
                         break;
@@ -76,9 +74,10 @@ public class GlobalExceptionHandler {
                         sizeError = "";
                         break;
                 }
-            MetaDTO metaDTO = new MetaDTO(errorCode, String.format(errorMessage, fieldName, sizeError));
-            baseDTO.setMeta(metaDTO);
-            break;
+                MetaDTO metaDTO = new MetaDTO(errorCode, String.format(errorMessage, fieldName, sizeError));
+                baseDTO.setMeta(metaDTO);
+                break;
+            }
         }
         return new ResponseEntity<>(baseDTO, HttpStatus.BAD_REQUEST);
     }
@@ -100,11 +99,13 @@ public class GlobalExceptionHandler {
     public final ResponseEntity<BaseDTO> handleConstraintViolationException(ConstraintViolationException ex) {
         String errorMessage = applicationMessages.getProperty("application.message..general.validation.error.text");
         for (ConstraintViolation<?> error : ex.getConstraintViolations()) {
-            errorMessage = String.format(
-                    applicationMessages.getProperty("application.message.validation.error.text"),
-                    ((PathImpl) error.getPropertyPath()).getLeafNode().getName()
-            );
-            break;
+            if(!error.getMessage().isEmpty()) {
+                errorMessage = String.format(
+                        applicationMessages.getProperty("application.message.validation.error.text"),
+                        ((PathImpl) error.getPropertyPath()).getLeafNode().getName()
+                );
+                break;
+            }
         }
         MetaDTO metaDTO = MetaDTO.builder()
                 .code(HttpStatus.BAD_REQUEST.value())

@@ -17,7 +17,6 @@ import static org.springframework.http.HttpStatus.CREATED;
 
 @SpringBootTest(webEnvironment = RANDOM_PORT, classes = ShorteningURLApplication.class)
 class UrlControllerTest {
-
     @Autowired
     private TestRestTemplate restTemplate;
 

@@ -3,28 +3,25 @@ package com.pyruz.shortening.handler;
 import org.springframework.stereotype.Component;
 
 import java.io.IOException;
+import java.util.Properties;
 
 @Component
 public class ApplicationMessages {
-    private static final ApplicationMessages instance = new ApplicationMessages();
-    private static java.util.Properties properties;
-    String prop = "messages.properties";
+    private final Properties properties;
 
-    private ApplicationMessages() {
-        properties = new java.util.Properties();
-    }
-
-    public static ApplicationMessages getInstance() {
-        return instance;
+    public ApplicationMessages(Properties properties) {
+        this.properties = properties;
     }
 
     public String getProperty(String key) {
         try {
+            String prop = "messages.properties";
             properties.load(ApplicationMessages.class.getClassLoader().getResourceAsStream(prop));
-        } catch (IOException e) {
-            e.printStackTrace();
+            return properties.getProperty(key);
+        } catch (IOException ioException) {
+            ioException.getMessage();
+            return null;
         }
-        return properties.getProperty(key);
     }
 
 }

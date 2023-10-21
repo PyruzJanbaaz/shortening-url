@@ -1,6 +1,8 @@
 package com.pyruz.shortening.handler;
 
 import com.pyruz.shortening.model.entiry.Url;
+import lombok.NoArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
 
 import java.net.URL;

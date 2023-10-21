@@ -21,7 +21,6 @@ import java.util.Optional;
 
 @Service
 public class UrlService implements IUrlService {
-
     final UrlRepository urlRepository;
     final ReviewRepository reviewRepository;
     final ApplicationProperties applicationProperties;
@@ -36,7 +35,6 @@ public class UrlService implements IUrlService {
         this.applicationProperties = applicationProperties;
         this.urlMapper = urlMapper;
     }
-
 
     @Override
     public BaseDTO generateShortURL(UrlBean urlBean) {
@@ -58,7 +56,6 @@ public class UrlService implements IUrlService {
                 .data(urlMapper.URL_DTO(existURL.get()))
                 .build();
     }
-
 
     @Override
     public BaseDTO generateCustomShortURL(CustomUrlBean customUrlBean) {

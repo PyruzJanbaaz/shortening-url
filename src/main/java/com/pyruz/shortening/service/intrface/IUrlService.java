@@ -8,14 +8,9 @@ import org.springframework.stereotype.Service;
 
 @Service
 public interface IUrlService {
-
     BaseDTO generateShortURL(UrlBean urlBean);
-
     BaseDTO generateCustomShortURL(CustomUrlBean customUrlBean);
-
     Url getCurrentURL(String url);
-
     BaseDTO getURLReview(String url);
-
     BaseDTO deleteURL(String url);
 }

@@ -30,19 +30,14 @@ class UrlServiceTest {
 
     @InjectMocks
     private UrlService urlService;
-
     @Mock
     private UrlRepository urlRepository;
-
     @Mock
     private ReviewRepository reviewRepository;
-
     @Mock
     private ApplicationProperties applicationProperties;
-
     @Mock
     private UrlMapper urlMapper;
-
     private Url url;
 
     @BeforeEach
