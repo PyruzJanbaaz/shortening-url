@@ -41,7 +41,4 @@ class UrlControllerTest {
         ResponseEntity<BaseDTO> responseEntity = restTemplate.postForEntity("/api/v1/url", urlBean, BaseDTO.class);
         assertEquals(BAD_REQUEST, responseEntity.getStatusCode());
     }
-
-
-
 }

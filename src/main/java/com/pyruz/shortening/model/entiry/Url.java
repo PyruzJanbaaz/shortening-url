@@ -1,10 +1,8 @@
 package com.pyruz.shortening.model.entiry;
 
 import com.fasterxml.jackson.annotation.JsonManagedReference;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
+import org.hibernate.annotations.CreationTimestamp;
 
 import javax.persistence.*;
 import java.util.Date;
@@ -12,6 +10,7 @@ import java.util.List;
 
 @Entity
 @Table(name = "url")
+@Builder
 @Getter
 @Setter
 @NoArgsConstructor
@@ -28,7 +27,7 @@ public class Url {
     @Column(name = "short_url", nullable = false)
     private String shortURL;
 
-    @Column(name = "creation_date", nullable = false)
+    @Column(name = "creation_date", columnDefinition = "TIMESTAMP DEFAULT CURRENT_TIMESTAMP")
     private Date creationDate;
 
     @JsonManagedReference

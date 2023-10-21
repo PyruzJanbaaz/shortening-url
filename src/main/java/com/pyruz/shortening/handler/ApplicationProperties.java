@@ -20,5 +20,4 @@ public class ApplicationProperties {
     public String getProperty(String name) {
         return environment.getProperty(name);
     }
-
 }

@@ -16,6 +16,7 @@ import com.pyruz.shortening.repository.UrlRepository;
 import com.pyruz.shortening.service.intrface.IUrlService;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+
 import java.util.Calendar;
 import java.util.Optional;
 
@@ -41,10 +42,10 @@ public class UrlService implements IUrlService {
         String hashCode = TypesHelper.getHashCodeString(urlBean.hashCode());
         Optional<Url> existURL = getURLByShortURL(hashCode);
         if (existURL.isEmpty()) {
-            Url url = new Url();
-            url.setShortURL(hashCode);
-            url.setOriginalURL(urlBean.getUrl());
-            url.setCreationDate(Calendar.getInstance().getTime());
+            Url url = Url.builder()
+                    .shortURL(hashCode)
+                    .originalURL(urlBean.getUrl())
+                    .build();
             url = urlRepository.save(url);
             return BaseDTO.builder()
                     .meta(MetaDTO.getInstance(applicationProperties))
@@ -69,10 +70,10 @@ public class UrlService implements IUrlService {
                             )
                     ).build();
         }
-        Url url = new Url();
-        url.setShortURL(customUrlBean.getCustomShortPortion());
-        url.setOriginalURL(customUrlBean.getUrl());
-        url.setCreationDate(Calendar.getInstance().getTime());
+        Url url = Url.builder()
+                .shortURL(customUrlBean.getCustomShortPortion())
+                .originalURL(customUrlBean.getUrl())
+                .build();
         return BaseDTO.builder()
                 .meta(MetaDTO.getInstance(applicationProperties))
                 .data(urlMapper.URL_DTO(urlRepository.save(url)))
@@ -91,11 +92,12 @@ public class UrlService implements IUrlService {
                         .message(applicationProperties.getProperty("application.message.not.found.text"))
                         .build()
         );
-        Review review = new Review();
-        review.setCreationDate(Calendar.getInstance().getTime());
-        review.setIp(TypesHelper.getClientIpAddress());
-        review.setUrl(existUrl);
-        reviewRepository.save(review);
+        reviewRepository.save(
+                Review.builder()
+                        .ip(TypesHelper.getClientIpAddress())
+                        .url(existUrl)
+                        .build()
+        );
         return existUrl;
     }
 

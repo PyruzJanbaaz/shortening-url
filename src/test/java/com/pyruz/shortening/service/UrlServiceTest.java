@@ -19,15 +19,12 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import java.util.Calendar;
-
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
 class UrlServiceTest {
-
     @InjectMocks
     private UrlService urlService;
     @Mock
@@ -49,11 +46,11 @@ class UrlServiceTest {
                 applicationProperties,
                 urlMapper
         );
-        url = new Url();
-        url.setId(1L);
-        url.setShortURL("ERt450");
-        url.setCreationDate(Calendar.getInstance().getTime());
-        url.setOriginalURL("https://www.mercedes-arena-stuttgart.de/en/inovation");
+        url = Url.builder()
+                .id(1L)
+                .shortURL("ERt450")
+                .originalURL("https://www.mercedes-arena-stuttgart.de/en/inovation")
+                .build();
     }
 
     @Test
