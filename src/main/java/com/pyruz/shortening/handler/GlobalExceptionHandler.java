@@ -3,6 +3,8 @@ package com.pyruz.shortening.handler;
 import com.pyruz.shortening.model.dto.base.BaseDTO;
 import com.pyruz.shortening.model.dto.base.MetaDTO;
 import com.pyruz.shortening.model.dto.base.ServiceExceptionDTO;
+import jakarta.validation.ConstraintViolation;
+import jakarta.validation.ConstraintViolationException;
 import org.hibernate.validator.internal.engine.path.PathImpl;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -14,8 +16,6 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.servlet.NoHandlerFoundException;
 
-import javax.validation.ConstraintViolation;
-import javax.validation.ConstraintViolationException;
 import java.util.Objects;
 
 @ControllerAdvice

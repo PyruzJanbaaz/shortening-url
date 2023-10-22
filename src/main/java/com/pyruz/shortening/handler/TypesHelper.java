@@ -1,17 +1,16 @@
 package com.pyruz.shortening.handler;
 
+import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.web.context.request.RequestAttributes;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
-
-import javax.servlet.http.HttpServletRequest;
 import java.util.Calendar;
 import java.util.Date;
 
 public class TypesHelper {
 
-    private static String BENZ = "BENZ";
-    private static String UNKNOWN = "UNKNOWN";
+    private static final String BENZ = "BENZ";
+    private static final String UNKNOWN = "UNKNOWN";
     protected static final String[] HEADERS_TO_TRY = {
             "X-Forwarded-",
             "X-Forwarded-For",

@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.dao.DataIntegrityViolationException;
+
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
@@ -21,10 +22,7 @@ class UrlRepositoryTest {
     @Test
     @DisplayName("It should generate and save a shortening URL!")
     void generateShortURL_Success() {
-        Url url = Url.builder()
-                .originalURL("https://www.mercedes-arena-stuttgart.de/en/inovation")
-                .shortURL("https://mercedes.de/ERt450")
-                .build();
+        Url url = this.setUrl();
         url = urlRepository.save(url);
         assertNotNull(url);
         assertThat(url.getId()).isNotZero();
@@ -33,10 +31,7 @@ class UrlRepositoryTest {
     @Test
     @DisplayName("It should throw an exception when originalURL in Null!")
     void generateShortURL_Failed() {
-        Url url = Url.builder()
-                .originalURL("https://www.mercedes-arena-stuttgart.de/en/inovation")
-                .shortURL("https://mercedes.de/ERt450")
-                .build();
+        Url url = this.setUrl();
         url = urlRepository.save(url);
         assertNotNull(url);
         assertThat(url.getId()).isNotZero();
@@ -48,5 +43,11 @@ class UrlRepositoryTest {
                 () -> urlRepository.flush());
     }
 
+    private Url setUrl() {
+        return Url.builder()
+                .originalURL("https://www.mercedes-arena-stuttgart.de/en/inovation")
+                .shortURL("https://mercedes.de/ERt450")
+                .build();
+    }
 
 }

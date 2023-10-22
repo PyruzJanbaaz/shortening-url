@@ -2,10 +2,11 @@
 A simple URL shortening Service by Spring Boot
 
 You need the following tools and technologies to develop the same.
-- Spring-Boot 2.7.3
-- Springfox-swagger2 2.9.2
-- Lombok 1.18.8
-- JavaSE 11
+- Spring-Boot 3.1.2
+- Springfox-swagger 2.0.4
+- Lombok 1.18.30
+- MapStruct 1.5.5.Final
+- JavaSE 17
 - Maven 3.3.9
 
 # Dependencies
@@ -14,7 +15,7 @@ Open the pom.xml file for spring-aop configuration:
       <parent>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
-        <version>2.7.3</version>
+        <version>3.1.2</version>
         <relativePath/> <!-- lookup parent from repository -->
       </parent>
       
