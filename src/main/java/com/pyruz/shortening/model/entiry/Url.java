@@ -13,12 +13,14 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.hibernate.annotations.CreationTimestamp;
+import org.springframework.data.annotation.LastModifiedDate;
 import java.util.Date;
 import java.util.List;
 
 @Entity
 @Table(name = "url")
-@Builder
+@Builder(toBuilder = true)
 @Getter
 @Setter
 @NoArgsConstructor
@@ -35,8 +37,13 @@ public class Url {
     @Column(name = "short_url", nullable = false)
     private String shortURL;
 
-    @Column(name = "creation_date", columnDefinition = "TIMESTAMP DEFAULT CURRENT_TIMESTAMP")
-    private Date creationDate;
+    @CreationTimestamp
+    @Column(name = "created_at", nullable = false, updatable = false)
+    private Date createdAt;
+
+    @LastModifiedDate
+    @Column(name = "updated_at")
+    private Date updatedAt;
 
     @JsonManagedReference
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "url")

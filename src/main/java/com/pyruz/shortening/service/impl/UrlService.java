@@ -110,7 +110,7 @@ public class UrlService implements IUrlService {
         return BaseDTO.builder()
                 .meta(MetaDTO.getInstance(applicationProperties))
                 .data(
-                        reviewRepository.findReviewsByUrlAndCreationDateBetween(
+                        reviewRepository.findReviewsByUrlAndCreatedAtBetween(
                                 existUrl,
                                 TypesHelper.yesterdayStartDatetime(),
                                 TypesHelper.yesterdayEndDatetime()

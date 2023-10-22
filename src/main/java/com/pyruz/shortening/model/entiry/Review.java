@@ -14,6 +14,8 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.hibernate.annotations.CreationTimestamp;
+import org.springframework.data.annotation.LastModifiedDate;
 
 import java.util.Date;
 
@@ -32,8 +34,13 @@ public class Review {
     @Column(name = "ip", nullable = false)
     private String ip;
 
-    @Column(name = "creation_date", columnDefinition = "TIMESTAMP DEFAULT CURRENT_TIMESTAMP")
-    private Date creationDate;
+    @CreationTimestamp
+    @Column(name = "created_at", nullable = false, updatable = false)
+    private Date createdAt;
+
+    @LastModifiedDate
+    @Column(name="updated_at")
+    private Date updatedAt;
 
     @JsonBackReference
     @ManyToOne(fetch = FetchType.LAZY)

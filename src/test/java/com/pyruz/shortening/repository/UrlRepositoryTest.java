@@ -29,6 +29,15 @@ class UrlRepositoryTest {
     }
 
     @Test
+    @DisplayName("It should throw and exception when the original URL is not valid!")
+    void generateShortURL_invalidURL_Failed(){
+        Url url = Url.builder().build();
+        urlRepository.save(url);
+        assertThrows(DataIntegrityViolationException.class,
+                () -> urlRepository.flush());
+    }
+
+    @Test
     @DisplayName("It should throw an exception when originalURL in Null!")
     void generateShortURL_Failed() {
         Url url = this.setUrl();
@@ -36,8 +45,9 @@ class UrlRepositoryTest {
         assertNotNull(url);
         assertThat(url.getId()).isNotZero();
 
-        Url finalUrl = url;
-        finalUrl.setOriginalURL(null);
+        Url finalUrl = url.toBuilder()
+                .originalURL(null)
+                .build();
         urlRepository.save(finalUrl);
         assertThrows(DataIntegrityViolationException.class,
                 () -> urlRepository.flush());
