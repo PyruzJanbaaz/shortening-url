@@ -2,6 +2,7 @@ package com.pyruz.shortening.controller;
 
 import com.pyruz.shortening.model.domain.CustomUrlBean;
 import com.pyruz.shortening.model.domain.UrlBean;
+import com.pyruz.shortening.model.dto.base.BaseDTO;
 import com.pyruz.shortening.service.impl.UrlService;
 import org.hibernate.validator.constraints.URL;
 import org.springframework.http.HttpStatus;
@@ -33,7 +34,7 @@ public class UrlController {
      * @return Url in baseDto data field
      */
     @PostMapping("/v1/url")
-    public ResponseEntity<?> generateShortURL(@Valid @RequestBody UrlBean urlBean) {
+    public ResponseEntity<BaseDTO> generateShortURL(@Valid @RequestBody UrlBean urlBean) {
         return new ResponseEntity<>(urlService.generateShortURL(urlBean), HttpStatus.CREATED);
     }
 
@@ -46,7 +47,7 @@ public class UrlController {
      * @return Url in baseDto data field
      */
     @PostMapping("/v1/url/custom")
-    public ResponseEntity<?> generateCustomShortURL(@Valid @RequestBody CustomUrlBean customUrlBean) {
+    public ResponseEntity<BaseDTO> generateCustomShortURL(@Valid @RequestBody CustomUrlBean customUrlBean) {
         return new ResponseEntity<>(urlService.generateCustomShortURL(customUrlBean), HttpStatus.OK);
     }
 
@@ -71,7 +72,7 @@ public class UrlController {
      * @return List<Review> in baseDto data field
      */
     @GetMapping("/v1/url/review")
-    public ResponseEntity<?> getUrlReviewCount(@URL @RequestParam String shortURL) {
+    public ResponseEntity<BaseDTO> getUrlReviewCount(@URL @RequestParam String shortURL) {
         return new ResponseEntity<>(urlService.getURLReview(shortURL), HttpStatus.OK);
     }
 
@@ -84,7 +85,7 @@ public class UrlController {
      * @return baseDto
      */
     @DeleteMapping("/v1/url")
-    public ResponseEntity<?> redirectToOriginalUrl(@URL @RequestParam String shortURL) {
+    public ResponseEntity<BaseDTO> redirectToOriginalUrl(@URL @RequestParam String shortURL) {
         return new ResponseEntity<>(urlService.deleteURL(shortURL), HttpStatus.OK);
     }
 }

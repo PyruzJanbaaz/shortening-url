@@ -21,9 +21,10 @@ class UrlRepositoryTest {
     @Test
     @DisplayName("It should generate and save a shortening URL!")
     void generateShortURL_Success() {
-        Url url = new Url();
-        url.setOriginalURL("https://www.mercedes-arena-stuttgart.de/en/inovation");
-        url.setShortURL("https://mercedes.de/ERt450");
+        Url url = Url.builder()
+                .originalURL("https://www.mercedes-arena-stuttgart.de/en/inovation")
+                .shortURL("https://mercedes.de/ERt450")
+                .build();
         url = urlRepository.save(url);
         assertNotNull(url);
         assertThat(url.getId()).isNotZero();
@@ -32,9 +33,10 @@ class UrlRepositoryTest {
     @Test
     @DisplayName("It should throw an exception when originalURL in Null!")
     void generateShortURL_Failed() {
-        Url url = new Url();
-        url.setOriginalURL("https://www.mercedes-arena-stuttgart.de/en/inovation");
-        url.setShortURL("https://mercedes.de/ERt450");
+        Url url = Url.builder()
+                .originalURL("https://www.mercedes-arena-stuttgart.de/en/inovation")
+                .shortURL("https://mercedes.de/ERt450")
+                .build();
         url = urlRepository.save(url);
         assertNotNull(url);
         assertThat(url.getId()).isNotZero();
