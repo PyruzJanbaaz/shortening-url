@@ -2,7 +2,7 @@ package com.pyruz.shortening.controller;
 
 import com.pyruz.shortening.ShorteningURLApplication;
 import com.pyruz.shortening.model.domain.UrlBean;
-import com.pyruz.shortening.model.dto.base.BaseDTO;
+import com.pyruz.shortening.model.dto.UrlDTO;
 import lombok.SneakyThrows;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -27,7 +27,7 @@ class UrlControllerTest {
         UrlBean urlBean = UrlBean.builder()
                 .url("https://www.mercedes-arena-stuttgart.de/en/inovation")
                 .build();
-        ResponseEntity<BaseDTO> responseEntity = restTemplate.postForEntity("/api/v1/url", urlBean, BaseDTO.class);
+        ResponseEntity<UrlDTO> responseEntity = restTemplate.postForEntity("/api/v1/url", urlBean, UrlDTO.class);
         assertEquals(CREATED, responseEntity.getStatusCode());
     }
 
@@ -38,7 +38,7 @@ class UrlControllerTest {
         UrlBean urlBean = UrlBean.builder()
                 .url("BAD URL")
                 .build();
-        ResponseEntity<BaseDTO> responseEntity = restTemplate.postForEntity("/api/v1/url", urlBean, BaseDTO.class);
+        ResponseEntity<UrlDTO> responseEntity = restTemplate.postForEntity("/api/v1/url", urlBean, UrlDTO.class);
         assertEquals(BAD_REQUEST, responseEntity.getStatusCode());
     }
 }

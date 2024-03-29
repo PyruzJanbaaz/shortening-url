@@ -31,10 +31,6 @@ public class TypesHelper {
     private TypesHelper() {
     }
 
-    public static Integer tryParseInt(Object obj) {
-        return Integer.parseInt(obj.toString());
-    }
-
     public static String getHashCodeString(int hashCode) {
         char[] benz = BENZ.toCharArray();
         char[] temp = String.format("%06d", hashCode).toCharArray();

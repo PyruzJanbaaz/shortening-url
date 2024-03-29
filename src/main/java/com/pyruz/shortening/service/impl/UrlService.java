@@ -1,42 +1,34 @@
 package com.pyruz.shortening.service.impl;
 
-import com.pyruz.shortening.handler.ApplicationProperties;
+import com.pyruz.shortening.handler.CustomServiceException;
 import com.pyruz.shortening.handler.TypesHelper;
 import com.pyruz.shortening.handler.UrlHandler;
 import com.pyruz.shortening.model.domain.CustomUrlBean;
 import com.pyruz.shortening.model.domain.UrlBean;
-import com.pyruz.shortening.model.dto.base.BaseDTO;
-import com.pyruz.shortening.model.dto.base.MetaDTO;
-import com.pyruz.shortening.model.dto.base.ServiceExceptionDTO;
+import com.pyruz.shortening.model.dto.UrlDTO;
 import com.pyruz.shortening.model.entiry.Review;
 import com.pyruz.shortening.model.entiry.Url;
 import com.pyruz.shortening.model.mapper.UrlMapper;
 import com.pyruz.shortening.repository.ReviewRepository;
 import com.pyruz.shortening.repository.UrlRepository;
 import com.pyruz.shortening.service.intrface.IUrlService;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
+import java.util.Locale;
 import java.util.Optional;
 
 @Service
+@RequiredArgsConstructor
 public class UrlService implements IUrlService {
+
     final UrlRepository urlRepository;
     final ReviewRepository reviewRepository;
-    final ApplicationProperties applicationProperties;
-    final UrlMapper urlMapper;
-
-    public UrlService(UrlRepository urlRepository,
-                      ReviewRepository reviewRepository,
-                      ApplicationProperties applicationProperties,
-                      UrlMapper urlMapper) {
-        this.urlRepository = urlRepository;
-        this.reviewRepository = reviewRepository;
-        this.applicationProperties = applicationProperties;
-        this.urlMapper = urlMapper;
-    }
 
     @Override
-    public BaseDTO generateShortURL(UrlBean urlBean) {
+    public Url generateShortURL(UrlBean urlBean) {
         String hashCode = TypesHelper.getHashCodeString(urlBean.hashCode());
         Optional<Url> existURL = getURLByShortURL(hashCode);
         if (existURL.isEmpty()) {
@@ -44,38 +36,24 @@ public class UrlService implements IUrlService {
                     .shortURL(hashCode)
                     .originalURL(urlBean.getUrl())
                     .build();
-            url = urlRepository.save(url);
-            return BaseDTO.builder()
-                    .meta(MetaDTO.getInstance(applicationProperties))
-                    .data(urlMapper.URL_DTO(url))
-                    .build();
+            return urlRepository.save(url);
         }
-        return BaseDTO.builder()
-                .meta(MetaDTO.getInstance(applicationProperties))
-                .data(urlMapper.URL_DTO(existURL.get()))
-                .build();
+        return existURL.get();
     }
 
     @Override
-    public BaseDTO generateCustomShortURL(CustomUrlBean customUrlBean) {
+    public Url generateCustomShortURL(CustomUrlBean customUrlBean) {
         if (getURLByShortURL(customUrlBean.getCustomShortPortion()).isPresent()) {
-            throw ServiceExceptionDTO.builder()
-                    .code(HttpStatus.NOT_ACCEPTABLE.value())
-                    .message(
-                            String.format(
-                                    applicationProperties.getProperty("application.message.is.already.exist.text"),
-                                    customUrlBean.getCustomShortPortion()
-                            )
-                    ).build();
+            throw new CustomServiceException(
+                    "application.message.is.already.exist.text",
+                    new Object[]{customUrlBean.getCustomShortPortion()},
+                    HttpStatus.BAD_REQUEST);
         }
         Url url = Url.builder()
                 .shortURL(customUrlBean.getCustomShortPortion())
                 .originalURL(customUrlBean.getUrl())
                 .build();
-        return BaseDTO.builder()
-                .meta(MetaDTO.getInstance(applicationProperties))
-                .data(urlMapper.URL_DTO(urlRepository.save(url)))
-                .build();
+        return urlRepository.save(url);
     }
 
     private Optional<Url> getURLByShortURL(String shortURL) {
@@ -85,10 +63,10 @@ public class UrlService implements IUrlService {
     @Override
     public Url getCurrentURL(String url) {
         Url existUrl = urlRepository.findByShortURL(UrlHandler.getShortPortion(url)).orElseThrow(
-                () -> ServiceExceptionDTO.builder()
-                        .code(HttpStatus.NOT_FOUND.value())
-                        .message(applicationProperties.getProperty("application.message.not.found.text"))
-                        .build()
+                () -> new CustomServiceException(
+                        "application.message.not.found.text",
+                        null,
+                        HttpStatus.NOT_FOUND)
         );
         reviewRepository.save(
                 Review.builder()
@@ -100,35 +78,27 @@ public class UrlService implements IUrlService {
     }
 
     @Override
-    public BaseDTO getURLReview(String url) {
+    public List<Review> getURLReview(String url) {
         Url existUrl = urlRepository.findByShortURL(UrlHandler.getShortPortion(url)).orElseThrow(
-                () -> ServiceExceptionDTO.builder()
-                        .code(HttpStatus.NOT_FOUND.value())
-                        .message(applicationProperties.getProperty("application.message.not.found.text"))
-                        .build()
+                () -> new CustomServiceException(
+                        "application.message.not.found.text",
+                        null,
+                        HttpStatus.NOT_FOUND)
         );
-        return BaseDTO.builder()
-                .meta(MetaDTO.getInstance(applicationProperties))
-                .data(
-                        reviewRepository.findReviewsByUrlAndCreatedAtBetween(
-                                existUrl,
-                                TypesHelper.yesterdayStartDatetime(),
-                                TypesHelper.yesterdayEndDatetime()
-                        )
-                ).build();
+        return reviewRepository.findReviewsByUrlAndCreatedAtBetween(
+                existUrl,
+                TypesHelper.yesterdayStartDatetime(),
+                TypesHelper.yesterdayEndDatetime());
     }
 
     @Override
-    public BaseDTO deleteURL(String url) {
+    public void deleteURL(String url) {
         Url existUrl = getURLByShortURL(UrlHandler.getShortPortion(url)).orElseThrow(
-                () -> ServiceExceptionDTO.builder()
-                        .code(HttpStatus.NOT_FOUND.value())
-                        .message(applicationProperties.getProperty("application.message.not.found.text"))
-                        .build()
+                () -> new CustomServiceException(
+                        "application.message.not.found.text",
+                        null,
+                        HttpStatus.NOT_FOUND)
         );
         urlRepository.delete(existUrl);
-        return BaseDTO.builder()
-                .meta(MetaDTO.getInstance(applicationProperties))
-                .build();
     }
 }

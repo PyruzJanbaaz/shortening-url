@@ -2,15 +2,17 @@ package com.pyruz.shortening.service.intrface;
 
 import com.pyruz.shortening.model.domain.CustomUrlBean;
 import com.pyruz.shortening.model.domain.UrlBean;
-import com.pyruz.shortening.model.dto.base.BaseDTO;
+import com.pyruz.shortening.model.entiry.Review;
 import com.pyruz.shortening.model.entiry.Url;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 public interface IUrlService {
-    BaseDTO generateShortURL(UrlBean urlBean);
-    BaseDTO generateCustomShortURL(CustomUrlBean customUrlBean);
+    Url generateShortURL(UrlBean urlBean);
+    Url generateCustomShortURL(CustomUrlBean customUrlBean);
     Url getCurrentURL(String url);
-    BaseDTO getURLReview(String url);
-    BaseDTO deleteURL(String url);
+    List<Review> getURLReview(String url);
+    void deleteURL(String url);
 }

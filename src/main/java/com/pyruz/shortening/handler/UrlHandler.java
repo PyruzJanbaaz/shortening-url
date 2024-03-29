@@ -36,7 +36,4 @@ public class UrlHandler {
         return shortURL.substring(shortURL.lastIndexOf('/') + 1);
     }
 
-    public static String getFullShorURL(Url url) {
-        return UrlHandler.getBaseDomain(url.getOriginalURL()) + "/" + url.getShortURL();
-    }
 }

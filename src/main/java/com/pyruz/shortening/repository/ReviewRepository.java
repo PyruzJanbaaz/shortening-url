@@ -11,5 +11,5 @@ import java.util.Optional;
 
 @Repository
 public interface ReviewRepository extends JpaRepository<Review, Long> {
-    Optional<List<Review>> findReviewsByUrlAndCreatedAtBetween(Url url, Date from, Date to);
+    List<Review> findReviewsByUrlAndCreatedAtBetween(Url url, Date from, Date to);
 }

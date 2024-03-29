@@ -5,9 +5,9 @@ import com.pyruz.shortening.model.dto.UrlDTO;
 import com.pyruz.shortening.model.entiry.Url;
 import org.mapstruct.*;
 
-@Mapper
+@Mapper(componentModel = "spring")
 public interface UrlMapper {
-    default UrlDTO URL_DTO(Url url) {
+    default UrlDTO toUrlDTO(Url url) {
         UrlDTO urlDTO = new UrlDTO();
         urlDTO.setOriginalURL(url.getOriginalURL());
         urlDTO.setShortURL(UrlHandler.getBaseDomain(url.getOriginalURL()) + "/" + url.getShortURL());

@@ -1,6 +1,5 @@
 USE shortening_url_dev;
 -- Table: url
-DROP TABLE IF EXISTS url;
 CREATE TABLE url
 (
     id bigint NOT NULL,
@@ -12,7 +11,6 @@ CREATE TABLE url
 );
 
 -- Table: review
-DROP TABLE IF EXISTS review;
 CREATE TABLE review
 (
     id bigint NOT NULL,
